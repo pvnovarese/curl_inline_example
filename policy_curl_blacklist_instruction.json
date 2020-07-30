@@ -1,0 +1,155 @@
+{
+  "blacklisted_images": [],
+  "description": "Demo bundle with curl package blacklist and curl run instruction prohibited",
+  "id": "56df4bc9-222f-4ee0-8cfa-d7ee0f3c0f3f",
+  "mappings": [
+    {
+      "id": "c4f9bf74-dc38-4ddf-b5cf-00e9c0074611",
+      "image": {
+        "type": "tag",
+        "value": "*"
+      },
+      "name": "default",
+      "policy_ids": [
+        "48e6f7d6-1765-11e8-b5f9-8b6f228548b6"
+      ],
+      "registry": "*",
+      "repository": "*",
+      "whitelist_ids": [
+        "2cedec50-2dd9-4b0a-85ec-52dbfa62201b"
+      ]
+    }
+  ],
+  "name": "pvn_bundle",
+  "policies": [
+    {
+      "comment": "No vulnerability policies.  Just looking at Dockerfile, packages, etc.",
+      "id": "48e6f7d6-1765-11e8-b5f9-8b6f228548b6",
+      "name": "Security Checks",
+      "rules": [
+        {
+          "action": "STOP",
+          "gate": "dockerfile",
+          "id": "fbe6656a-4a4e-4cc3-8949-763867ccca43",
+          "params": [
+            {
+              "name": "instruction",
+              "value": "RUN"
+            },
+            {
+              "name": "check",
+              "value": "like"
+            },
+            {
+              "name": "value",
+              "value": ".*curl.*"
+            }
+          ],
+          "trigger": "instruction"
+        },
+        {
+          "action": "WARN",
+          "gate": "dockerfile",
+          "id": "16dafaa3-1c85-4721-b1ec-c6e4d83da910",
+          "params": [],
+          "trigger": "no_dockerfile_provided"
+        },
+        {
+          "action": "GO",
+          "gate": "dockerfile",
+          "id": "7bc83d79-dc58-480a-a386-a21dd6ec3736",
+          "params": [
+            {
+              "name": "instruction",
+              "value": "HEALTHCHECK"
+            },
+            {
+              "name": "check",
+              "value": "exists"
+            }
+          ],
+          "trigger": "instruction"
+        },
+        {
+          "action": "STOP",
+          "gate": "packages",
+          "id": "a56b2dc5-0694-48eb-b871-53dff838aae9",
+          "params": [
+            {
+              "name": "name",
+              "value": "curl"
+            }
+          ],
+          "trigger": "blacklist"
+        },
+        {
+          "action": "STOP",
+          "gate": "dockerfile",
+          "id": "20a32af4-5c16-487f-8c67-212ff2bc2d11",
+          "params": [
+            {
+              "name": "users",
+              "value": "root"
+            },
+            {
+              "name": "type",
+              "value": "blacklist"
+            }
+          ],
+          "trigger": "effective_user"
+        },
+        {
+          "action": "STOP",
+          "gate": "secret_scans",
+          "id": "509d5438-f0e3-41df-bb1a-33013f23e31c",
+          "params": [
+            {
+              "name": "content_regex_name",
+              "value": "AWS_ACCESS_KEY,AWS_SECRET_KEY"
+            }
+          ],
+          "trigger": "content_regex_checks"
+        },
+        {
+          "action": "STOP",
+          "gate": "dockerfile",
+          "id": "ce7b8000-829b-4c27-8122-69cd59018400",
+          "params": [
+            {
+              "name": "ports",
+              "value": "22,80,443"
+            },
+            {
+              "name": "type",
+              "value": "blacklist"
+            }
+          ],
+          "trigger": "exposed_ports"
+        }
+      ],
+      "version": "1_0"
+    }
+  ],
+  "version": "1_0",
+  "whitelisted_images": [],
+  "whitelists": [
+    {
+      "comment": "Example of whitelisting known derived packages that contain only development headers but may trigger as vulnerable as they are associated with the packages that contain the software itself",
+      "id": "2cedec50-2dd9-4b0a-85ec-52dbfa62201b",
+      "items": [
+        {
+          "gate": "vulnerabilities",
+          "id": "1409ebfd-7aec-44e8-bb27-73a3b97ba16b",
+          "trigger_id": "*+linux-headers-*"
+        },
+        {
+          "gate": "vulnerabilities",
+          "id": "45925fb3-c7ac-4ceb-9e9f-a6402f798f1f",
+          "trigger_id": "*+*-dev"
+        }
+      ],
+      "name": "Development OS Packages",
+      "version": "1_0"
+    }
+  ]
+}
