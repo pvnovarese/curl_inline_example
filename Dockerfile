@@ -19,7 +19,7 @@ RUN make clean && make
 ### STAGE 2
 FROM alpine:latest
 MAINTAINER Paul Novarese pvn@novarese.net
-LABEL name="solunar-demo"
+LABEL name="curl_inline_example"
 LABEL maintainer="pvn@novarese.net"
 
 HEALTHCHECK NONE
