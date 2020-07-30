@@ -2,7 +2,7 @@
 # will stop this with a simple package blacklist on curl
 FROM alpine:latest 
 MAINTAINER Paul Novarese pvn@novarese.net
-LABEL name="curl_example"
+LABEL name="curl_inline_example"
 LABEL maintainer="pvn@novarese.net"
  
 WORKDIR /
