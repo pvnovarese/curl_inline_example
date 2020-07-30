@@ -2,8 +2,8 @@ pipeline {
   environment {
     registry = 'registry.hub.docker.com'
     registryCredential = 'docker-hub'
-    repository = 'pvnovarese/curl_example'
-    imageLine = 'pvnovarese/curl_example:dev Dockerfile'
+    repository = 'pvnovarese/curl_inline_example'
+    imageLine = 'pvnovarese/curl_inline_example:dev Dockerfile'
   }
   agent any
   stages {
