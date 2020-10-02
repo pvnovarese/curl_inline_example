@@ -12,13 +12,12 @@ pipeline {
         checkout scm
       }
     }
-    stage('Build image and push to registry') {
+    stage('Build image') {
       steps {
         sh 'docker --version'
         script {
           docker.withRegistry('https://' + registry, registryCredential) {
             def image = docker.build(repository + ':dev')
-            image.push()
           }
         }
       }
