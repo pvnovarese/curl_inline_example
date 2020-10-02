@@ -25,8 +25,7 @@ pipeline {
     }
     stage('Scan') {
       steps {
-        sh 'curl -s https://ci-tools.anchore.io/inline_scan-latest | bash -s -- scan -d Dockerfile -b policy_curl_blacklist_instruction.json
- -f -r ${repository}:dev'
+        sh 'curl -s https://ci-tools.anchore.io/inline_scan-latest | bash -s -- scan -d Dockerfile -b policy_curl_blacklist_instruction.json -f -r ${repository}:dev'
       }
     }
     stage('Build and push stable image to registry') {
